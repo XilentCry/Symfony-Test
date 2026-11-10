@@ -1,6 +1,13 @@
 # Hostinger serves the repo root (public_html); route everything into Symfony's public/ dir.
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Block direct web access to sensitive root files/directories
+    RewriteRule ^(?:config|src|var|vendor|bin)/ - [F,L]
+    RewriteRule ^(?:composer\.(?:json|lock)|symfony\.lock|\.env.*)$ - [F,L]
+
+    # Route everything into public/
     RewriteCond %{REQUEST_URI} !^/public/
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
+
